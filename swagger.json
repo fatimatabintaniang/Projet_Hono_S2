@@ -25,9 +25,17 @@
         "properties": {
           "prenom":  { "type": "string", "example": "Ada" },
           "nom":     { "type": "string", "example": "Lovelace" },
-          "adresse": { "type": "string", "example": "12 Rue des maths, Paris" },
+          "telephone": { "type": "string", "example": "12 Rue des maths, Paris" },
           "email":   { "type": "string", "format": "email", "example": "ada@example.com" },
-          "password":{ "type": "string", "format": "password", "example": "secret123" }
+          "password":{ "type": "string", "format": "password", "example": "secret123" },
+          "image": { "type": "string",  "format": "uri", "example": "https://res.cloudinary.com/...jpg" },
+
+          "role":    {
+            "type": "string",
+            "enum": ["ADMIN", "ENSEIGNANT", "ETUDIANT"],
+            "default": "ADMIN",
+            "description": "Rôle de l'utilisateur (par défaut ADMIN)"
+          }
         }
       },
       "LoginReq": {

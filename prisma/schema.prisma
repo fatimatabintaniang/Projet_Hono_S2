@@ -2,35 +2,153 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   prenom    String
   nom       String
-  adresse   String
-  email     String   @unique
+  telephone String  @default("0000000000")
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now())
-  products  Product[]
+  image     String?
+  createdAt DateTime  @default(now())
+role Role @default(ADMIN)
+ 
+
+  enseignant Enseignant?  @relation
+  etudiant   Etudiant?    @relation
+
+  historiqueLectures       HistoriqueLecture[]
+  historiqueTelechargements HistoriqueTelechargement[]
+  favoris                 Favori[]
+  memoires                Memoire[]
 }
 
 
-model Product {
+
+model Enseignant {
+  id        Int    @id @default(autoincrement())
+  specialite String
+  grade      String
+  userId     Int    @unique
+  user       User   @relation(fields: [userId], references: [id])
+}
+
+model Etudiant {
+  id        Int    @id @default(autoincrement())
+  matricule String
+  classe    String
+  userId    Int    @unique
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+
+model LivreElectronique {
+  id             Int      @id @default(autoincrement())
+  titre          String
+  auteur         String
+  format         String
+  chemin_fichier String
+  type           TypeLivre
+
+  categorieId    Int
+  niveauId       Int
+  matiereId      Int
+
+  categorie      Categorie   @relation(fields: [categorieId], references: [id])
+  niveau         Niveau      @relation(fields: [niveauId], references: [id])
+  matiere        Matiere     @relation(fields: [matiereId], references: [id])
+
+  lectures       HistoriqueLecture[]
+  telechargements HistoriqueTelechargement[]
+  favoris        Favori[]
+}
+
+model Categorie {
+  id    Int    @id @default(autoincrement())
+  nom   String
+
+  livres LivreElectronique[]
+}
+
+model Niveau {
+  id     Int    @id @default(autoincrement())
+  libelle String
+
+  livres  LivreElectronique[]
+}
+
+model Matiere {
+  id          Int    @id @default(autoincrement())
+  nom_matiere String
+
+  livres      LivreElectronique[]
+}
+
+model HistoriqueLecture {
   id        Int      @id @default(autoincrement())
-  label     String
-  price     Float
-  quantity  Int
-  imageUrl  String?
-  ownerId   Int
-  owner     User     @relation(fields: [ownerId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  date_lecture DateTime
+
+  userId    Int
+  livreId   Int
+
+  utilisateur User   @relation(fields: [userId], references: [id])
+  livre        LivreElectronique @relation(fields: [livreId], references: [id])
 }
 
+model HistoriqueTelechargement {
+  id               Int      @id @default(autoincrement())
+  date_telechargement DateTime
 
+  userId           Int
+  livreId          Int
+
+  utilisateur      User   @relation(fields: [userId], references: [id])
+  livre            LivreElectronique @relation(fields: [livreId], references: [id])
+}
+
+model Favori {
+  id        Int      @id @default(autoincrement())
+  a_lire_plus_tard Boolean
+
+  userId    Int
+  livreId   Int
+
+  utilisateur User   @relation(fields: [userId], references: [id])
+  livre       LivreElectronique @relation(fields: [livreId], references: [id])
+}
+
+model Memoire {
+  id             Int      @id @default(autoincrement())
+  titre          String
+  auteur         String
+  annee          Int
+  specialite     String
+  fichier_memoire String
+  statut         StatutMemoire
+
+  utilisateurId  Int
+  utilisateur    User   @relation(fields: [utilisateurId], references: [id])
+}
+
+enum TypeLivre {
+  PDF
+  EPUB
+  MEMOIRE
+  LIVRE_COURS
+}
+
+enum StatutMemoire {
+  en_attente
+  valide
+}
+
+enum Role {
+  ADMIN
+  ENSEIGNANT
+  ETUDIANT
+}

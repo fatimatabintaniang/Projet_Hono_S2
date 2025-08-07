@@ -7,14 +7,14 @@ import { registerSchema, loginSchema } from '../schemas/auth.schema.js'
 /* ---------------- Register ---------------- */
 export const register = async (c) => {
   const body = await c.req.json()
-  const { prenom, nom, adresse, email, password } = registerSchema.parse(body)
+  const { prenom, nom, telephone, email, password} = registerSchema.parse(body)
 
 
   const hashed = await bcrypt.hash(password, 10)
 
 
   const user = await prisma.user.create({
-    data: { prenom, nom, adresse, email, password: hashed },
+    data: { prenom, nom, telephone, email, password: hashed,role: 'ADMIN' },
   })
 
 
