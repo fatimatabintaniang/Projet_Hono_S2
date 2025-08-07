@@ -1,0 +1,200 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Products API",
+    "version": "1.0.0",
+    "description": "CRUD produits + Auth avec JWT. Les routes /products* nécessitent l'en‑tête Authorization: Bearer <token>."
+  },
+  "servers": [
+    { "url": "http://localhost:3000", "description": "Dev local" }
+  ],
+
+
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "RegisterReq": {
+        "type": "object",
+        "required": ["prenom", "nom", "adresse", "email", "password"],
+        "properties": {
+          "prenom":  { "type": "string", "example": "Ada" },
+          "nom":     { "type": "string", "example": "Lovelace" },
+          "adresse": { "type": "string", "example": "12 Rue des maths, Paris" },
+          "email":   { "type": "string", "format": "email", "example": "ada@example.com" },
+          "password":{ "type": "string", "format": "password", "example": "secret123" }
+        }
+      },
+      "LoginReq": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email":    { "type": "string", "format": "email", "example": "ada@example.com" },
+          "password": { "type": "string", "format": "password", "example": "secret123" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id":      { "type": "integer", "example": 1 },
+          "prenom":  { "type": "string" },
+          "nom":     { "type": "string" },
+          "adresse": { "type": "string" },
+          "email":   { "type": "string", "format": "email" }
+        }
+      },
+      "TokenRes": {
+        "type": "object",
+        "properties": { "token": { "type": "string", "example": "eyJhbGciOi..." } }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id":       { "type": "integer", "example": 10 },
+          "label":    { "type": "string",  "example": "Chaise" },
+          "price":    { "type": "number",  "example": 59.9 },
+          "quantity": { "type": "integer", "example": 5 },
+          "imageUrl": { "type": "string",  "format": "uri", "example": "https://res.cloudinary.com/...jpg" },
+          "ownerId":  { "type": "integer", "example": 1 }
+        }
+      },
+      "ProductCreate": {
+        "type": "object",
+        "required": ["label", "price", "quantity"],
+        "properties": {
+          "label":    { "type": "string" },
+          "price":    { "type": "number", "minimum": 0.01 },
+          "quantity": { "type": "integer", "minimum": 0 },
+          "image":    { "type": "string", "format": "binary" }
+        }
+      },
+      "ProductUpdate": {
+        "type": "object",
+        "properties": {
+          "label":    { "type": "string" },
+          "price":    { "type": "number", "minimum": 0.01 },
+          "quantity": { "type": "integer", "minimum": 0 },
+          "image":    { "type": "string", "format": "binary" }
+        }
+      }
+    },
+    "parameters": {
+      "productId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "example": 10 }
+      }
+    }
+  },
+
+
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/RegisterReq" } }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } } },
+          "409": { "description": "Email déjà utilisé" }
+        }
+      }
+    },
+
+
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LoginReq" } }
+          }
+        },
+        "responses": {
+          "200": { "description": "JWT", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TokenRes" } } } },
+          "401": { "description": "Identifiants invalides" }
+        }
+      }
+    },
+
+
+    "/products": {
+      "get": {
+        "summary": "Get my products",
+        "security": [ { "BearerAuth": [] } ],
+        "responses": {
+          "200": {
+            "description": "Liste de produits",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } } } }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "post": {
+        "summary": "Create product",
+        "security": [ { "BearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": { "schema": { "$ref": "#/components/schemas/ProductCreate" } }
+          }
+        },
+        "responses": {
+          "201": { "description": "Créé", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+
+
+    "/products/{id}": {
+      "parameters": [ { "$ref": "#/components/parameters/productId" } ],
+      "get": {
+        "summary": "Get one product",
+        "security": [ { "BearerAuth": [] } ],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } },
+          "404": { "description": "Not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "patch": {
+        "summary": "Update product",
+        "security": [ { "BearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": { "schema": { "$ref": "#/components/schemas/ProductUpdate" } }
+          }
+        },
+        "responses": {
+          "200": { "description": "Updated" },
+          "404": { "description": "Not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "delete": {
+        "summary": "Delete product",
+        "security": [ { "BearerAuth": [] } ],
+        "responses": {
+          "204": { "description": "Deleted" },
+          "404": { "description": "Not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    }
+  }
+}
+
+

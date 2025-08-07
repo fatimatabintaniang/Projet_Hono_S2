@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "prisma": "prisma",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hono/node-server": "^1.18.1",
+    "@prisma/client": "^6.13.0",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
+    "dotenv": "^17.2.1",
+    "hono": "^4.8.12",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prisma": "^6.13.0"
+  }
+}
