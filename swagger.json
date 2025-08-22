@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Products API",
+    "title": "Gestion_Bibliotheque API",
     "version": "1.0.0",
-    "description": "CRUD produits + Auth avec JWT. Les routes /products* nécessitent l'en‑tête Authorization: Bearer <token>."
+    "description": "APP Bibliotheque + Auth avec JWT. Les routes * nécessitent l'en‑tête Authorization: Bearer <token>."
   },
   "servers": [
     { "url": "http://localhost:3000", "description": "Dev local" }
@@ -132,73 +132,6 @@
         "responses": {
           "200": { "description": "JWT", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TokenRes" } } } },
           "401": { "description": "Identifiants invalides" }
-        }
-      }
-    },
-
-
-    "/products": {
-      "get": {
-        "summary": "Get my products",
-        "security": [ { "BearerAuth": [] } ],
-        "responses": {
-          "200": {
-            "description": "Liste de produits",
-            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } } } }
-          },
-          "401": { "description": "Unauthorized" }
-        }
-      },
-      "post": {
-        "summary": "Create product",
-        "security": [ { "BearerAuth": [] } ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": { "schema": { "$ref": "#/components/schemas/ProductCreate" } }
-          }
-        },
-        "responses": {
-          "201": { "description": "Créé", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } },
-          "401": { "description": "Unauthorized" }
-        }
-      }
-    },
-
-
-    "/products/{id}": {
-      "parameters": [ { "$ref": "#/components/parameters/productId" } ],
-      "get": {
-        "summary": "Get one product",
-        "security": [ { "BearerAuth": [] } ],
-        "responses": {
-          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } },
-          "404": { "description": "Not found" },
-          "401": { "description": "Unauthorized" }
-        }
-      },
-      "patch": {
-        "summary": "Update product",
-        "security": [ { "BearerAuth": [] } ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": { "schema": { "$ref": "#/components/schemas/ProductUpdate" } }
-          }
-        },
-        "responses": {
-          "200": { "description": "Updated" },
-          "404": { "description": "Not found" },
-          "401": { "description": "Unauthorized" }
-        }
-      },
-      "delete": {
-        "summary": "Delete product",
-        "security": [ { "BearerAuth": [] } ],
-        "responses": {
-          "204": { "description": "Deleted" },
-          "404": { "description": "Not found" },
-          "401": { "description": "Unauthorized" }
         }
       }
     }

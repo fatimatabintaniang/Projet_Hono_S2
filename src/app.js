@@ -4,8 +4,9 @@ import { cors } from 'hono/cors'
 
 
 import { authRoutes }    from './routes/auth.routes.js'
-import { productRoutes } from './routes/product.routes.js'
-import swaggerStaticApp  from './swagger-static.js'  // ← la nouvelle sous‑app
+import { livreRoutes }   from './routes/livre.routes.js'
+import { categorieRoutes } from './routes/categorie.routes.js'
+import swaggerStaticApp  from './swagger-static.js' 
 
 
 export const app = new Hono()
@@ -15,8 +16,10 @@ export const app = new Hono()
 
 /* --------- Sous‑apps --------- */
 app.route('/auth',     authRoutes)
-app.route('/products', productRoutes)
-app.route('/docs',     swaggerStaticApp)   
+app.route('/docs',     swaggerStaticApp)
+app.route('/livres',   livreRoutes)
+app.route('/categories', categorieRoutes)
+
 
 
 /* --------- Endpoints simples --------- */
