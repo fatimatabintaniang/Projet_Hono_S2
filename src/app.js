@@ -6,6 +6,11 @@ import { cors } from 'hono/cors'
 import { authRoutes }    from './routes/auth.routes.js'
 import { livreRoutes }   from './routes/livre.routes.js'
 import { categorieRoutes } from './routes/categorie.routes.js'
+import { niveauRoutes }  from './routes/niveau.route.js'
+import { matiereRoutes }  from './routes/matiere.routes.js'
+import { telechargementRoutes } from './routes/telechargement.routes.js'
+import { favorisRoutes }  from './routes/favoris.routes.js'
+
 import swaggerStaticApp  from './swagger-static.js' 
 
 
@@ -19,6 +24,10 @@ app.route('/auth',     authRoutes)
 app.route('/docs',     swaggerStaticApp)
 app.route('/livres',   livreRoutes)
 app.route('/categories', categorieRoutes)
+app.route('/niveaux',  niveauRoutes)
+app.route('/matieres',  matiereRoutes)
+app.route('/telechargements', telechargementRoutes)
+app.route('/favoris',  favorisRoutes)
 
 
 

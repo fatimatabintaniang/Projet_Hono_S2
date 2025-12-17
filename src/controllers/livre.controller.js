@@ -1,23 +1,12 @@
 import { prisma } from '../config/db.js'
+import {livreSchema} from '../schemas/livre.schema.js'
 
 // Créer un livre
 export const createLivre = async (c) => {
-  const data = await c.req.json()
-
-  const livre = await prisma.livreElectronique.create({
-    data: {
-      titre: data.titre,
-      auteur: data.auteur,
-      format: data.format,
-      chemin_fichier: data.chemin_fichier,
-      type: data.type,
-      categorieId: data.categorieId,
-      niveauId: data.niveauId,
-      matiereId: data.matiereId
-    }
-  })
-
-  return c.json(livre)
+  const body = await c.req.json()
+const data = livreSchema.parse(body)
+const livres = await prisma.livreElectronique.create({data})
+  return c.json(livres)
 }
 
 // Récupérer tous les livres

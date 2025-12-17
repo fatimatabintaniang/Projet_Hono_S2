@@ -1,5 +1,8 @@
 -- CreateEnum
-CREATE TYPE "public"."TypeLivre" AS ENUM ('PDF', 'EPUB', 'MEMOIRE', 'LIVRE_COURS');
+CREATE TYPE "public"."Format" AS ENUM ('PDF', 'EPUB', 'DOCS');
+
+-- CreateEnum
+CREATE TYPE "public"."TypeLivre" AS ENUM ('LIVRE_COURS', 'MEMOIRE');
 
 -- CreateEnum
 CREATE TYPE "public"."StatutMemoire" AS ENUM ('en_attente', 'valide');
@@ -17,29 +20,9 @@ CREATE TABLE "public"."User" (
     "password" TEXT NOT NULL,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "role" "public"."Role" NOT NULL DEFAULT 'ADMIN',
+    "role" "public"."Role" NOT NULL DEFAULT 'ETUDIANT',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."Enseignant" (
-    "id" SERIAL NOT NULL,
-    "specialite" TEXT NOT NULL,
-    "grade" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
-
-    CONSTRAINT "Enseignant_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."Etudiant" (
-    "id" SERIAL NOT NULL,
-    "matricule" TEXT NOT NULL,
-    "classe" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
-
-    CONSTRAINT "Etudiant_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -47,7 +30,7 @@ CREATE TABLE "public"."LivreElectronique" (
     "id" SERIAL NOT NULL,
     "titre" TEXT NOT NULL,
     "auteur" TEXT NOT NULL,
-    "format" TEXT NOT NULL,
+    "format" "public"."Format" NOT NULL,
     "chemin_fichier" TEXT NOT NULL,
     "type" "public"."TypeLivre" NOT NULL,
     "categorieId" INTEGER NOT NULL,
@@ -127,18 +110,6 @@ CREATE TABLE "public"."Memoire" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Enseignant_userId_key" ON "public"."Enseignant"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Etudiant_userId_key" ON "public"."Etudiant"("userId");
-
--- AddForeignKey
-ALTER TABLE "public"."Enseignant" ADD CONSTRAINT "Enseignant_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."Etudiant" ADD CONSTRAINT "Etudiant_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."LivreElectronique" ADD CONSTRAINT "LivreElectronique_categorieId_fkey" FOREIGN KEY ("categorieId") REFERENCES "public"."Categorie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

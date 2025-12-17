@@ -6,10 +6,11 @@
     "description": "APP Bibliotheque + Auth avec JWT. Les routes * nécessitent l'en‑tête Authorization: Bearer <token>."
   },
   "servers": [
-    { "url": "http://localhost:3000", "description": "Dev local" }
+    {
+      "url": "http://localhost:3000",
+      "description": "Dev local"
+    }
   ],
-
-
   "components": {
     "securitySchemes": {
       "BearerAuth": {
@@ -21,121 +22,1424 @@
     "schemas": {
       "RegisterReq": {
         "type": "object",
-        "required": ["prenom", "nom", "adresse", "email", "password"],
+        "required": [
+          "nom",
+          "prenom",
+          "telephone",
+          "image",
+          "email",
+          "password",
+          "role"
+        ],
         "properties": {
-          "prenom":  { "type": "string", "example": "Ada" },
-          "nom":     { "type": "string", "example": "Lovelace" },
-          "telephone": { "type": "string", "example": "12 Rue des maths, Paris" },
-          "email":   { "type": "string", "format": "email", "example": "ada@example.com" },
-          "password":{ "type": "string", "format": "password", "example": "secret123" },
-          "image": { "type": "string",  "format": "uri", "example": "https://res.cloudinary.com/...jpg" },
-
-          "role":    {
+          "prenom": {
             "type": "string",
-            "enum": ["ADMIN", "ENSEIGNANT", "ETUDIANT"],
-            "default": "ADMIN",
-            "description": "Rôle de l'utilisateur (par défaut ADMIN)"
+            "example": "Ada"
+          },
+          "nom": {
+            "type": "string",
+            "example": "Lovelace"
+          },
+          "telephone": {
+            "type": "string",
+            "example": "12 Rue des maths, Paris"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "ada@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "secret123"
+          },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://res.cloudinary.com/...jpg"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "ENSEIGNANT",
+              "ETUDIANT"
+            ],
+            "default": "ETUDIANT",
+            "description": "Rôle de l'utilisateur (par défaut ETUDIANT)"
           }
         }
       },
       "LoginReq": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
-          "email":    { "type": "string", "format": "email", "example": "ada@example.com" },
-          "password": { "type": "string", "format": "password", "example": "secret123" }
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "ada@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "secret123"
+          }
         }
       },
       "User": {
         "type": "object",
+        "required": [
+          "prenom",
+          "nom",
+          "adresse",
+          "email"
+        ],
         "properties": {
-          "id":      { "type": "integer", "example": 1 },
-          "prenom":  { "type": "string" },
-          "nom":     { "type": "string" },
-          "adresse": { "type": "string" },
-          "email":   { "type": "string", "format": "email" }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "prenom": {
+            "type": "string"
+          },
+          "nom": {
+            "type": "string"
+          },
+          "adresse": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
         }
       },
       "TokenRes": {
         "type": "object",
-        "properties": { "token": { "type": "string", "example": "eyJhbGciOi..." } }
-      },
-      "Product": {
-        "type": "object",
         "properties": {
-          "id":       { "type": "integer", "example": 10 },
-          "label":    { "type": "string",  "example": "Chaise" },
-          "price":    { "type": "number",  "example": 59.9 },
-          "quantity": { "type": "integer", "example": 5 },
-          "imageUrl": { "type": "string",  "format": "uri", "example": "https://res.cloudinary.com/...jpg" },
-          "ownerId":  { "type": "integer", "example": 1 }
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOi..."
+          }
         }
       },
-      "ProductCreate": {
+      "Categorie": {
         "type": "object",
-        "required": ["label", "price", "quantity"],
+        "required": [
+          "nom"
+        ],
         "properties": {
-          "label":    { "type": "string" },
-          "price":    { "type": "number", "minimum": 0.01 },
-          "quantity": { "type": "integer", "minimum": 0 },
-          "image":    { "type": "string", "format": "binary" }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nom": {
+            "type": "string",
+            "example": "Science Fiction"
+          }
         }
       },
-      "ProductUpdate": {
+      "UpdateCategorie": {
         "type": "object",
+        "required": [
+          "nom"
+        ],
         "properties": {
-          "label":    { "type": "string" },
-          "price":    { "type": "number", "minimum": 0.01 },
-          "quantity": { "type": "integer", "minimum": 0 },
-          "image":    { "type": "string", "format": "binary" }
+          "nom": {
+            "type": "string",
+            "example": "Science Fiction"
+          }
+        }
+      },
+      "Niveau": {
+        "type": "object",
+        "required": [
+          "libelle"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "libelle": {
+            "type": "string",
+            "example": "Licence 1"
+          }
+        }
+      },
+      "UpdateNiveau": {
+        "type": "object",
+        "required": [
+          "libelle"
+        ],
+        "properties": {
+          "libelle": {
+            "type": "string",
+            "example": "Licence 1"
+          }
+        }
+      },
+      "Matiere": {
+        "type": "object",
+        "required": [
+          "nom_matiere"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nom_matiere": {
+            "type": "string",
+            "example": "Mathématiques"
+          }
+        }
+      },
+      "UpdateMatiere": {
+        "type": "object",
+        "required": [
+          "nom_matiere"
+        ],
+        "properties": {
+          "nom_matiere": {
+            "type": "string",
+            "example": "Mathématiques"
+          }
+        }
+      },
+      "Livre": {
+        "type": "object",
+        "required": [
+          "titre",
+          "auteur",
+          "format",
+          "chemin_fichier",
+          "type",
+          "categorieId",
+          "niveauId",
+          "matiereId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "titre": {
+            "type": "string",
+            "example": "Introduction à la Programmation"
+          },
+          "auteur": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "format": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "chemin_fichier": {
+            "type": "string",
+            "example": "/files/intro_programming.pdf"
+          },
+          "type": {
+            "type": "string",
+            "example": "Memoire"
+          },
+          "categorieId": {
+            "type": "integer",
+            "example": 2
+          },
+          "niveauId": {
+            "type": "integer",
+            "example": 3
+          },
+          "matiereId": {
+            "type": "integer",
+            "example": 4
+          }
+        }
+      },
+      "UpdateLivre": {
+        "type": "object",
+        "required": [
+          "titre",
+          "auteur",
+          "format",
+          "chemin_fichier",
+          "type",
+          "categorieId",
+          "niveauId",
+          "matiereId"
+        ],
+        "properties": {
+          "titre": {
+            "type": "string",
+            "example": "Introduction à la Programmation"
+          },
+          "auteur": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "format": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "chemin_fichier": {
+            "type": "string",
+            "example": "/files/intro_programming.pdf"
+          },
+          "type": {
+            "type": "string",
+            "example": "Memoire"
+          },
+          "categorieId": {
+            "type": "integer",
+            "example": 2
+          },
+          "niveauId": {
+            "type": "integer",
+            "example": 3
+          },
+          "matiereId": {
+            "type": "integer",
+            "example": 4
+          }
+        }
+      },
+      "LivreDownload": {
+        "type": "object",
+        "required": [
+          "livreId",
+          "userId",
+          "date_telechargement"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "livreId": {
+            "type": "integer",
+            "example": 5
+          },
+          "userId": {
+            "type": "integer",
+            "example": 10
+          },
+          "date_telechargement": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T12:00:00Z"
+          }
+        }
+      },
+      "LivreFavori": {
+        "type": "object",
+        "required": [
+          "livreId",
+          "userId",
+          "a_lire_plus_tard"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "livreId": {
+            "type": "integer",
+            "example": 5
+          },
+          "userId": {
+            "type": "integer",
+            "example": 10
+          },
+          "a_lire_plus_tard": {
+            "type": "boolean",
+            "example": true
+          }
         }
       }
     },
     "parameters": {
-      "productId": {
+      "Id": {
         "name": "id",
         "in": "path",
         "required": true,
-        "schema": { "type": "integer", "example": 10 }
+        "schema": {
+          "type": "integer",
+          "example": 10
+        }
+      },
+      "livreId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "example": 5
+        }
       }
     }
   },
-
-
   "paths": {
     "/auth/register": {
       "post": {
-        "summary": "Register",
+        "summary": "Inscription",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/RegisterReq" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterReq"
+              }
+            }
           }
         },
         "responses": {
-          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } } },
-          "409": { "description": "Email déjà utilisé" }
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterReq"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email déjà utilisé"
+          }
         }
       }
     },
-
-
     "/auth/login": {
       "post": {
-        "summary": "Login",
+        "summary": "Connexion",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/LoginReq" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginReq"
+              }
+            }
           }
         },
         "responses": {
-          "200": { "description": "JWT", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TokenRes" } } } },
-          "401": { "description": "Identifiants invalides" }
+          "200": {
+            "description": "JWT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identifiants invalides"
+          }
         }
       }
-    }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Récupérer toutes les catégories",
+        "requestBody": {},
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des catégories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Categorie"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ajouter une catégorie",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Categorie"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Catégorie créée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Categorie"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "summary": "Récupérer une catégorie par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Catégorie trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Categorie"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Catégorie non trouvée"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Mettre à jour une catégorie par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategorie"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Catégorie mise à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Categorie"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "404": {
+            "description": "Catégorie non trouvée"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer une catégorie par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Catégorie supprimée"
+          },
+          "404": {
+            "description": "Catégorie non trouvée"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/niveaux": {
+      "get": {
+        "summary": "Récupérer tous les niveaux",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des niveaux",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Niveau"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ajouter un niveau",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Niveau"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Niveau créé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Niveau"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/niveaux/{id}": {
+      "get": {
+        "summary": "Récupérer un niveau par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Niveau trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Niveau"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Niveau non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Mettre à jour un niveau par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNiveau"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Niveau mis à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Niveau"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "404": {
+            "description": "Niveau non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer un niveau par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Niveau supprimé"
+          },
+          "404": {
+            "description": "Niveau non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/matieres": {
+      "get": {
+        "summary": "Récupérer toutes les matières",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des matières",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Matiere"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ajouter une matière",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Matiere"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Matière créée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Matiere"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/matieres/{id}": {
+      "get": {
+        "summary": "Récupérer une matière par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matière trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Matiere"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Matière non trouvée"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Mettre à jour une matière par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMatiere"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Matière mise à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Matiere"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "404": {
+            "description": "Matière non trouvée"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer une matière par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Matière supprimée"
+          },
+          "404": {
+            "description": "Matière non trouvée"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/livres": {
+      "get": {
+        "summary": "Récupérer tous les livres",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des livres",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Livre"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ajouter un livre",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Livre"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Livre créé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Livre"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/livres/{id}": {
+      "get": {
+        "summary": "Récupérer un livre par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Livre trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Livre"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Livre non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Mettre à jour un livre par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLivre"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Livre mis à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Livre"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "404": {
+            "description": "Livre non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer un livre par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Livre supprimé"
+          },
+          "404": {
+            "description": "Livre non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/telechargements": {
+      "get": {
+        "summary": "Récupérer tous les téléchargements de livres",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des téléchargements",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Livre"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "post": {
+        "summary": "Enregistrer un téléchargement de livre",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LivreDownload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Téléchargement enregistré",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivreDownload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/telechargements/{id}": {
+      "get": {
+        "summary": "Récupérer un téléchargement de livre par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/livreId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Téléchargement trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivreDownload"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Téléchargement non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Mettre à jour un téléchargement de livre par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/livreId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LivreDownload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Téléchargement mis à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivreDownload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "404": {
+            "description": "Téléchargement non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer un téléchargement de livre par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/livreId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Téléchargement supprimé"
+          },
+          "404": {
+            "description": "Téléchargement non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/favoris": {
+      "get": {
+        "summary": "Récupérer tous les livres favoris de l'utilisateur",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des  favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivreFavori"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ajouter un livre aux favoris de l'utilisateur",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LivreFavori"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Livre ajouté aux favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Livre"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/favoris/user/{id}": {
+      "get": {
+        "summary": "Récupérer les livres favoris d'un utilisateur par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des livres favoris de l'utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivreFavori"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+    },
+    "/favoris/{id}": {
+      "patch":{
+        "summary": "Mettre à jour un livre favori par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LivreFavori"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Livre favori mis à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivreFavori"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "404": {
+            "description": "Livre favori non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer un livre des favoris par ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Livre supprimé des favoris"
+          },
+          "404": {
+            "description": "Livre favori non trouvé"
+          },
+          "401": {
+            "description": "Non autorisé"
+          }
+        }
+      }
+      }
   }
 }
-
-

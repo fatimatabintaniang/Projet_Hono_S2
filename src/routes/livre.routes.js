@@ -9,7 +9,7 @@ import {
 } from '../controllers/livre.controller.js'
 
 export const livreRoutes = new Hono()
-  .use(authMiddleware) // protégé par auth
+  .use(authMiddleware) 
   .post('/', createLivre)
   .get('/', getLivres)
   .get('/:id', getLivre)

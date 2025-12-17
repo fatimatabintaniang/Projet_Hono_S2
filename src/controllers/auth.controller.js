@@ -23,7 +23,7 @@ export const register = async (c) => {
   const telephone = body.telephone;
   const email = body.email;
   const password = body.password;
-  const role = body.role || 'ADMIN';
+  const role = body.role || 'ETUDIANT';
   const file = body.image;
 
   // Validation avec Zod

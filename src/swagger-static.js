@@ -19,7 +19,7 @@ docs.get('/openapi.json', (c) => c.json(swaggerDoc))
 
 
 /* ---------- UI Swagger (CDN) ---------- */
-const html = /* html */ `
+const html = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,6 +57,4 @@ docs.use('/swagger-ui-assets/*',
     rewriteRequestPath: (p) => p.replace('/docs/swagger-ui-assets', '')
   })
 )
-
-
 export default docs

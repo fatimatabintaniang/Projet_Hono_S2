@@ -5,45 +5,26 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+    schemas = ["public"]
 }
 
 model User {
   id        Int       @id @default(autoincrement())
   prenom    String
   nom       String
-  telephone String  @default("0000000000")
+  telephone String    @default("0000000000")
   email     String    @unique
   password  String
   image     String?
   createdAt DateTime  @default(now())
-role Role @default(ADMIN)
- 
-
-  enseignant Enseignant?  @relation
-  etudiant   Etudiant?    @relation
+  role Role @default(ETUDIANT)
 
   historiqueLectures       HistoriqueLecture[]
   historiqueTelechargements HistoriqueTelechargement[]
   favoris                 Favori[]
   memoires                Memoire[]
-}
 
-
-
-model Enseignant {
-  id        Int    @id @default(autoincrement())
-  specialite String
-  grade      String
-  userId     Int    @unique
-  user       User   @relation(fields: [userId], references: [id])
-}
-
-model Etudiant {
-  id        Int    @id @default(autoincrement())
-  matricule String
-  classe    String
-  userId    Int    @unique
-  user      User   @relation(fields: [userId], references: [id])
+   @@schema("public")
 }
 
 
@@ -51,7 +32,7 @@ model LivreElectronique {
   id             Int      @id @default(autoincrement())
   titre          String
   auteur         String
-  format         String
+  format         Format
   chemin_fichier String
   type           TypeLivre
 
@@ -66,27 +47,35 @@ model LivreElectronique {
   lectures       HistoriqueLecture[]
   telechargements HistoriqueTelechargement[]
   favoris        Favori[]
+
+   @@schema("public")
 }
 
 model Categorie {
   id    Int    @id @default(autoincrement())
-  nom   String
+  nom   String  @unique
 
   livres LivreElectronique[]
+
+   @@schema("public")
 }
 
 model Niveau {
   id     Int    @id @default(autoincrement())
-  libelle String
+  libelle String  @unique
 
   livres  LivreElectronique[]
+
+   @@schema("public")
 }
 
 model Matiere {
   id          Int    @id @default(autoincrement())
-  nom_matiere String
+  nom_matiere String  @unique
 
   livres      LivreElectronique[]
+
+   @@schema("public")
 }
 
 model HistoriqueLecture {
@@ -98,17 +87,21 @@ model HistoriqueLecture {
 
   utilisateur User   @relation(fields: [userId], references: [id])
   livre        LivreElectronique @relation(fields: [livreId], references: [id])
+
+   @@schema("public")
 }
 
 model HistoriqueTelechargement {
   id               Int      @id @default(autoincrement())
-  date_telechargement DateTime
+  date_telechargement DateTime  @default(now())
 
   userId           Int
   livreId          Int
 
   utilisateur      User   @relation(fields: [userId], references: [id])
   livre            LivreElectronique @relation(fields: [livreId], references: [id])
+
+   @@schema("public")
 }
 
 model Favori {
@@ -120,6 +113,8 @@ model Favori {
 
   utilisateur User   @relation(fields: [userId], references: [id])
   livre       LivreElectronique @relation(fields: [livreId], references: [id])
+
+   @@schema("public")
 }
 
 model Memoire {
@@ -133,22 +128,37 @@ model Memoire {
 
   utilisateurId  Int
   utilisateur    User   @relation(fields: [utilisateurId], references: [id])
+
+   @@schema("public")
+}
+
+enum Format{
+  PDF
+  EPUB
+  DOCS
+
+   @@schema("public")
 }
 
 enum TypeLivre {
-  PDF
-  EPUB
-  MEMOIRE
-  LIVRE_COURS
+ LIVRE_COURS
+ MEMOIRE
+
+  @@schema("public")
 }
 
 enum StatutMemoire {
   en_attente
   valide
+
+   @@schema("public")
 }
 
 enum Role {
   ADMIN
   ENSEIGNANT
   ETUDIANT
+
+
+   @@schema("public")
 }
